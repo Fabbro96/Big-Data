@@ -1,5 +1,4 @@
-## Big Data wikipedia inverted index
-<h1> Project of the course "Big Data" at the University of Verona. </h1>
+## Project of the course "Big Data" at the University of Verona: wikipedia inverted index
 The project consists in the creation of an inverted index of the wikipedia dump.
 It was done in three steps:
 1. Parsing of the wikipedia dump (an XML file) using the etree library
