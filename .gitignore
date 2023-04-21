@@ -9,3 +9,6 @@ countedWordsFinalOutput.csv
 results.csv
 occurrences.csv
 titlesSize.csv
+finalFileToAnalyze.csv
+rawMerged.csv
+singleWordCounted.csv
