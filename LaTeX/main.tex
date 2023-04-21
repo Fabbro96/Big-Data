@@ -26,11 +26,11 @@
     \newpage
     \section{Introduzione}
     Richiesta del progetto: "L’output deve contenere, per ogni parola, la lista di pagine di wikipedia che contengono quella parola".
-    Divideremo in 3 parti, quindi, il progetto: una fase di processing, una parte per la gestione dell'inverted index e la fase finale, la creazione dei grafici.
-    Utilizzeremo principalmente 5 librerie: pyspark, lxml, pandas, matplotlib e mwparserfromhell.
+    Divideremo, quindi, in 3 parti il progetto: una fase di processing, una parte per la gestione dell'inverted index e la fase finale, la creazione dei grafici.
+    Utilizzeremo principalmente 4 librerie: pyspark, lxml, pandas, matplotlib.
     Ce ne sono altre ma sono tendenzialmente di contorno a queste che sono praticamente essenziali.
     \newline
-    Ovviamente ci sará una prima fase per controllare se il file (con estensione xml) esiste, in quel caso si andrá avanti con l'esecuzione, altrimenti verrá generato un errore.
+    Ovviamente ci sará una prima fase per controllare se il file (con estensione xml) esiste, in quel caso si andrá avanti, altrimenti verrá generato un errore che bloccherá l'esecuzione.
     \section{Processing}
     La fase di processing si suddivide in piú parti.
     \subsection{Metodi}
@@ -38,26 +38,19 @@
     \subsection{Analisi del file}
     Finalmente arriviamo alla parte piú importante: il processamento del file.
     \newline
-    Creo due file CSV (cosí mi é piú semplice analizzarli piú avanti), con due header ciascuno: index, che é una colonna comune fra i due, e due stringhe ossia \textbf{text} e \textbf{title}. Molto importante sará l'utilizzo del comando \textit{\textcolor{blue}{elem.clear()}} che ci permetterá di non sovraccaricare la memoria primaria scrivendo peró, ogni volta che un tag \textcolor{red}{text} oppure \textcolor{red}{title} viene trovato, una riga in uno dei file csv creati all'inizio.
+    Creo due file CSV (cosí mi é piú semplice analizzarli piú avanti), con due header ciascuno: index, che é la colonna comune fra i due, e altri, complessivamente, due campi ossia \textbf{text} e \textbf{title}. Molto importante sará l'utilizzo del comando \textit{\textcolor{blue}{elem.clear()}} che ci permetterá di non sovraccaricare la memoria primaria scrivendo quindi ogni volta che un tag \textcolor{red}{text} oppure \textcolor{red}{title} viene trovato, una riga in uno dei due file csv creati all'inizio della cella.
     \newline
-    Ho anche impostato un contatore formattato a percentuale che stamperá la percentuale di completamento dell'operazione.
+    Ho anche impostato un contatore formattato appositamente che stamperá la percentuale di completamento dell'operazione.
     \section{Inverted Index}
-    Qui si andrá ad utilizzare la libreria PySpark. Dopo aver inizializzato una SparkSession, andró a unire i due file utilizzando la colonna in comune: \textit{index}. Ne uscirá quindi un file unico contenente, per ogni titolo, tutte le parole che aveva all'interno della sua pagina. Successivamente si andrá a creare un altro file (countedWords) che conterrá 3 colonne: il titolo della pagina, la parola singola utilizzata ed un counter, quante volte quella parola é stata utilizzata in quella pagina.
+    Qui si andrá ad utilizzare la libreria PySpark. Dopo aver creato una SparkSession, andró a unire i due file csv precedentemente creati utilizzando la colonna in comune: \textit{index}. Ne uscirá quindi un file unico contenente, per ogni titolo, tutte le parole che aveva all'interno della sua pagina. Successivamente si andrá a creare un altro file (countedWords) che conterrá 3 colonne: il titolo della pagina, la parola singola utilizzata ed un counter per tener conto di quante volte quella parola é stata utilizzata in quella pagina.
     Da qui, ho generato un altro file (singleWordCounted) che avrá due sole colonne che indicheranno la parola ed il numero di occorrenze.
     Riprendendo \textcolor{blue}{countedWords.csv} vado ad eliminare la colonna \textit{count} cosí da creare un file (finalFileToAnalyze) per lettere tutte le parole presenti e salvarle in un set (per eliminare tutti i doppioni) e fare un casting di questo set a lista in modo da renderlo piú flessibile e comodo.
     \newline
     Ci servirá per creare (finalmente) il nostro file finale: results.csv che avrá due colonne: word e titles (che é la lista dei titoli), filtrando le parole in modo da evitare doppioni, usando la lista precedentemente creata e scrivendo, sempre in un file csv, riga per riga.
     \newline
-    Poi creeró altri due files, titlesSize (due colonne, word e list\_size) e occurences (list\_size e occurences che contiene la frequenza del numero di parole) che ci serviranno per la generazione dei grafici.
+    Poi creeró altri tre files, initialLetter(due colonne, char e occurence), titlesSize (due colonne, word e list\_size) e occurences (list\_size e occurences che contiene la frequenza del numero di parole) che ci serviranno per la generazione dei grafici.
     \section{Grafici}
-    Le librerie che ho utilizzato di piú sono principalmente pandas e matplotlib.
+    Le librerie che ho utilizzato di piú qui sono principalmente pandas e matplotlib.
+    Ho creato 5 grafici:
+    
 \end{document}
-
-
-
-
-
-
-
-
-
