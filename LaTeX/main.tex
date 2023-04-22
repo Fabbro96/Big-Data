@@ -42,15 +42,34 @@
     \newline
     Ho anche impostato un contatore formattato appositamente che stamperá la percentuale di completamento dell'operazione.
     \section{Inverted Index}
-    Qui si andrá ad utilizzare la libreria PySpark. Dopo aver creato una SparkSession, andró a unire i due file csv precedentemente creati utilizzando la colonna in comune: \textit{index}. Ne uscirá quindi un file unico contenente, per ogni titolo, tutte le parole che aveva all'interno della sua pagina. Successivamente si andrá a creare un altro file (countedWords) che conterrá 3 colonne: il titolo della pagina, la parola singola utilizzata ed un counter per tener conto di quante volte quella parola é stata utilizzata in quella pagina.
-    Da qui, ho generato un altro file (singleWordCounted) che avrá due sole colonne che indicheranno la parola ed il numero di occorrenze.
-    Riprendendo \textcolor{blue}{countedWords.csv} vado ad eliminare la colonna \textit{count} cosí da creare un file (finalFileToAnalyze) per lettere tutte le parole presenti e salvarle in un set (per eliminare tutti i doppioni) e fare un casting di questo set a lista in modo da renderlo piú flessibile e comodo.
+    Qui si andrá ad utilizzare principalmente la libreria PySpark. 
     \newline
-    Ci servirá per creare (finalmente) il nostro file finale: results.csv che avrá due colonne: word e titles (che é la lista dei titoli), filtrando le parole in modo da evitare doppioni, usando la lista precedentemente creata e scrivendo, sempre in un file csv, riga per riga.
+    Dopo aver creato una SparkSession, andró a unire i due file csv precedentemente creati utilizzando la colonna in comune: \textit{index}. Ne uscirá quindi un file unico \textit{\textcolor{blue}{rawMerged.csv}} contenente, per ogni titolo, tutte le parole che aveva all'interno della sua pagina. 
     \newline
-    Poi creeró altri tre files, initialLetter(due colonne, char e occurence), titlesSize (due colonne, word e list\_size) e occurences (list\_size e occurences che contiene la frequenza del numero di parole) che ci serviranno per la generazione dei grafici.
+    Successivamente si andrá a creare un altro file \textit{\textcolor{blue}{countedWords.csv}} che conterrá 3 colonne: il titolo della pagina, la parola singola utilizzata ed un counter per tener conto di quante volte quella parola é stata utilizzata in quella pagina.
+    \newline
+    Da qui, ho generato un altro file \textit{\textcolor{blue}{singleWordCounted.csv}} che avrá due sole colonne che indicheranno la parola ed il numero di occorrenze.
+    \newline
+    Riprendendo \textcolor{purple}{countedWords.csv} vado ad eliminare la colonna \textit{count} cosí da creare un file \textit{\textcolor{blue}{finalFileToAnalyze.csv}} per lettere tutte le parole presenti e salvarle in un set (per eliminare tutti i doppioni) e fare un casting di questo set a lista in modo da renderlo piú flessibile e comodo.
+    \newline
+    Ci servirá per creare (finalmente) il nostro file finale: \textit{\textcolor{blue}{results.csv}} che avrá due colonne: word e titles (che é la lista dei titoli), filtrando le parole in modo da evitare doppioni, usando la lista precedentemente creata e scrivendo, sempre in un file csv, riga per riga.
+    \newline
+    Poi creeró altri tre files, \textit{\textcolor{brown}{initialLetter.csv}} (due colonne, char e occurence), \textit{\textcolor{brown}{titlesSize.csv}} (due colonne, word e list\_size) e \textit{\textcolor{brown}{occurences.csv}} (list\_size e occurences che contiene la frequenza del numero di parole) che ci serviranno per la generazione dei grafici.
+    \newline Infine
+    \newline Ho utilizzato parecchio, ovviamente, la libreria PySpark in quanto ci é tornata molto utile per le operazioni complesse sui files csv (vedi ad esempio i groupBy) mentre per le operazioni piú semplici ho preferito usare pandas.
+    \newpage
     \section{Grafici}
-    Le librerie che ho utilizzato di piú qui sono principalmente pandas e matplotlib.
-    Ho creato 5 grafici:
-    
+    Le librerie che ho utilizzato di piú qui sono principalmente pandas per l'analisi dei csv e matplotlib per la generazione dei grafici.
+    Ne ho creati 5:
+    \begin{itemize}
+        \item Parole piú utilizzate: il primo grafico che mi é venuto in mente, anche quello piú effettivamente semplice. É un semplice grafico a barre generato con l'ausilio di \textit{\textcolor{blue}{singleWordCounted.csv}}. Rappresentata nell'asse x la parola e nell'asse y le occorrenze di quella parola.
+        Per rendere il tutto piú "pulito ed ordinato" ho preso soltanto le prime 10, ossia quelle con i valori maggiori.
+        \item Parole presenti in piú titoli: su queste ci ho pensato un po' di piú, come dice il titolo viene mostrato un grafico che indica le stesse cose sopra ma, in soldoni, le parole singole piú utilizzate, senza doppioni. Infatti i valori sono di molto inferiori. Qui ho utilizzato il file \textit{\textcolor{blue}{titlesSize.csv}}.
+        \item Ho anche sfruttato il file \textit{\textcolor{brown}{occurrences.csv}} per generare i due grafici successivi: entrambi raggruppano i titoli che contengono lo stesso numero di parole solo che nel primo verrá generato in base a circa 50 valori, nel secondo, che risulta piú dettagliato, andremo a crearlo basandoci sui 5 valori maggiori.
+        Mi spiego meglio: i titoli che contengono una parola sono quasi di 1 milione e mezzo.
+        \item Nell'ultimo grafico ho unito due tipologie di grafici: lo scatter ed il plot (con il solo scatter veniva troppo confusionario), invece cosí (anche se il risultato sembra uno di quei giochini in stile "unisci i puntini) é piú ordinato e capibile. Ho usato due colori diversi in modo da risaltare l'unione fra i due.
+        Questa volta il file che ci ha aiutato nella creazione di quest'ultimo grafico é stato \textit{\textcolor{brown}{initialLetter.csv}}.
+        \end{itemize}
+    \section{Finale}
+    Alla fine fermo l'instanza di spark e chiedo se i files creati precedentemente creati (tutti con estensione csv) volessero esser eliminati. Avrei voluto andare a chiedere singolarmente, file per file, se volesse esser cancellato oppure no ma mi é sembrata una scelta fin troppo lunga e dispersiva. Ho usato la libreria \textit{os} in modo da eseguire automaticamente l'azione.
 \end{document}
